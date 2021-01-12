@@ -6,12 +6,13 @@ const transactionForm = document.querySelector('.form');
 const inputText = document.getElementById('text');
 const inputAmount = document.getElementById('amount');
 const btnDelete = document.querySelector('.btn--delete');
+const btnSort = document.querySelector('.btn--sort');
 
 const localStorageTransactions = JSON.parse(
   localStorage.getItem('transactions')
 );
 
-console.log(JSON.parse(localStorage.getItem('transactions')));
+let toggle = false;
 
 let transactions =
   localStorage.getItem('transactions') !== null ? localStorageTransactions : [];
@@ -41,6 +42,8 @@ const addTransaction = function (e) {
   inputText.value = '';
   inputAmount.value = '';
 };
+
+const updateDom = function (transaction, item) {};
 
 // Add transactions to DOM list
 const addTransactionDOM = function (transaction) {
@@ -93,6 +96,19 @@ const updateLocalStorage = function () {
   localStorage.setItem('transactions', JSON.stringify(transactions));
 };
 
+// Sort the lists by ascending or descending order and update UI
+const sortByOrder = function (transactions) {
+  if (toggle === false) {
+    transactions.sort((a, b) => b.amount - a.amount);
+    toggle = true;
+  } else {
+    transactions.sort((a, b) => a.amount - b.amount);
+    toggle = false;
+  }
+
+  init();
+};
+
 // Init App
 const init = function () {
   historyList.innerHTML = '';
@@ -104,3 +120,6 @@ const init = function () {
 init();
 
 transactionForm.addEventListener('submit', addTransaction);
+btnSort.addEventListener('click', function () {
+  return sortByOrder(transactions);
+});
